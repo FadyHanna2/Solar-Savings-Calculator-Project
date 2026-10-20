@@ -5,7 +5,58 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Solar Savings Calculator</h1>
-    <p>Flask project is working.</p>
+
+    <div class="calculator-card">
+
+        <p class="small-title">SOLAR SAVINGS CALCULATOR</p>
+
+        <h1>Tell us about your electricity<br>costs</h1>
+
+        <p class="description">
+            Start with your current bill and the annual increase you expect from your utility company.
+        </p>
+
+        <form>
+
+            <label for="monthly_bill">Current monthly electric bill</label>
+
+            <div class="input-box">
+                <span>$</span>
+                <input
+                    type="number"
+                    id="monthly_bill"
+                    name="monthly_bill"
+                    placeholder="150.00"
+                >
+            </div>
+
+            <p class="help-text">
+                Enter the amount you currently pay each month.
+            </p>
+
+
+            <label for="utility_increase">Expected yearly utility increase</label>
+
+            <div class="input-box">
+                <input
+                    type="number"
+                    id="utility_increase"
+                    name="utility_increase"
+                    placeholder="3"
+                >
+                <span>%</span>
+            </div>
+
+            <p class="help-text">
+                For example, enter 3 for a 3% yearly increase.
+            </p>
+
+
+            <button type="button">Continue to solar payment</button>
+
+        </form>
+
+    </div>
+
 </body>
 </html>
