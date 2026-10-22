@@ -29,12 +29,14 @@
                     placeholder="150.00"
                 >
             </div>
-
+            
+            <p class="error-text" id="bill_error"></p>
+            
             <p class="help-text">
                 Enter the amount you currently pay each month.
             </p>
 
-
+            
             <label for="utility_increase">Expected yearly utility increase</label>
 
             <div class="input-box">
@@ -47,16 +49,41 @@
                 <span>%</span>
             </div>
 
+            <p class="error-text" id="increase_error"></p>
+
             <p class="help-text">
                 For example, enter 3 for a 3% yearly increase.
             </p>
 
 
-            <button type="button">Continue to solar payment</button>
+            <button type="button" onclick="validateElectricityInfo()">
+                Continue to solar payment
+            </button>
 
         </form>
 
     </div>
+
+    <script>
+        function validateElectricityInfo() {
+            let monthlyBill = document.getElementById("monthly_bill").value;
+            let utilityIncrease = document.getElementById("utility_increase").value;
+    
+            let billError = document.getElementById("bill_error");
+            let increaseError = document.getElementById("increase_error");
+    
+            billError.textContent = "";
+            increaseError.textContent = "";
+    
+            if (monthlyBill === "" || isNaN(monthlyBill) || Number(monthlyBill) <= 0) {
+                billError.textContent = "Please enter a valid monthly electric bill greater than $0.";
+            }
+    
+            if (utilityIncrease === "" || isNaN(utilityIncrease) || Number(utilityIncrease) < 0) {
+                increaseError.textContent = "Please enter a valid yearly utility increase.";
+            }
+        }
+    </script>
 
 </body>
 </html>
