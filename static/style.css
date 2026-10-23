@@ -99,3 +99,13 @@ button:hover {
     margin-top: 6px;
     margin-bottom: 0;
 }
+
+.success-message {
+    color: #247c46;
+    background-color: #eef7f0;
+    border: 1px solid #92b99e;
+    padding: 12px;
+    border-radius: 7px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
