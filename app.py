@@ -1,11 +1,10 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect, url_for
 
 app = Flask(__name__)
 app.secret_key = "solar-savings-project-key"
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    saved = False
 
     if request.method == "POST":
         monthly_bill = request.form.get("monthly_bill")
@@ -18,17 +17,24 @@ def home():
             if monthly_bill > 0 and utility_increase >= 0:
                 session["monthly_bill"] = monthly_bill
                 session["utility_increase"] = utility_increase
-                saved = True
+                return redirect(url_for("solar_payment"))
 
         except (TypeError, ValueError):
             pass
 
     return render_template(
         "index.html",
-        saved=saved,
         monthly_bill=session.get("monthly_bill"),
         utility_increase=session.get("utility_increase")
         )
+
+@app.route("/solar-payment")
+def solar_payment():
+
+    if "monthly_bill" not in session or "utility_increase" not in session:
+        return redirect(url_for("home"))
+
+    return render_template("solar_payment.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
