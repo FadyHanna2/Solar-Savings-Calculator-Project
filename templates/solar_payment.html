@@ -10,11 +10,53 @@
 
         <p class="small-title">SOLAR SAVINGS CALCULATOR</p>
 
-        <h1>Solar Payment Information</h1>
+        <h1>Tell us about your solar payment</h1>
 
         <p class="description">
-            Your electricity information is complete. The next step is to enter your solar payment information.
+            Enter your estimated monthly solar payment and the yearly increase for your solar payment.
         </p>
+
+        <form>
+
+            <label for="solar_payment">Estimated monthly solar payment</label>
+
+            <div class="input-box">
+                <span>$</span>
+                <input
+                    type="number"
+                    id="solar_payment"
+                    name="solar_payment"
+                    placeholder="100.00"
+                >
+            </div>
+
+            <p class="help-text">
+                Enter the amount you expect to pay for solar each month.
+            </p>
+
+
+            <label for="solar_increase">Expected yearly solar increase</label>
+
+            <div class="input-box">
+                <input
+                    type="number"
+                    id="solar_increase"
+                    name="solar_increase"
+                    placeholder="2.9"
+                >
+                <span>%</span>
+            </div>
+
+            <p class="help-text">
+                For example, enter 2.9 for a 2.9% yearly increase.
+            </p>
+            
+
+            <button type="button">
+                Continue
+            </button>
+
+        </form>
 
     </div>
 
