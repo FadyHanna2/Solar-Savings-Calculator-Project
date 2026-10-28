@@ -30,6 +30,8 @@
                 >
             </div>
 
+            <p class="error-text" id="solar_payment_error"></p>
+
             <p class="help-text">
                 Enter the amount you expect to pay for solar each month.
             </p>
@@ -47,18 +49,47 @@
                 <span>%</span>
             </div>
 
+            <p class="error-text" id="solar_increase_error"></p>
+
             <p class="help-text">
                 For example, enter 2.9 for a 2.9% yearly increase.
             </p>
             
 
-            <button type="button">
+            <button type="button" onclick="validateSolarPayment()">
                 Continue
             </button>
 
         </form>
 
     </div>
+
+    <script>
+        function validateSolarPayment() {
+            let solarPayment = document.getElementById("solar_payment").value;
+            let solarIncrease = document.getElementById("solar_increase").value;
+    
+            let paymentError = document.getElementById("solar_payment_error");
+            let increaseError = document.getElementById("solar_increase_error");
+    
+            paymentError.textContent = "";
+            increaseError.textContent = "";
+
+            let valid = true;
+    
+            if (solarPayment === "" || isNaN(solarPayment) || Number(solarPayment) <= 0) {
+                paymentError.textContent = "Please enter a valid monthly solar payment greater than $0.";
+                valid = false;
+            }
+    
+            if (solarIncrease === "" || isNaN(solarIncrease) || Number(solarIncrease) < 0) {
+                increaseError.textContent = "Please enter a valid yearly solar increase.";
+                valid = false;
+            }
+
+            return valid;
+        }
+    </script>
 
 </body>
 </html>
