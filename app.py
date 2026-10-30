@@ -45,7 +45,7 @@ def solar_payment():
             if solar_payment > 0 and solar_increase >= 0:
                 session["solar_payment"] = solar_payment
                 session["solar_increase"] = solar_increase
-                return redirect(url_for("solar_payment"))
+                return redirect(url_for("comparison_years"))
 
         except (TypeError, ValueError):
             pass
@@ -55,6 +55,14 @@ def solar_payment():
         solar_payment=session.get("solar_payment"),
         solar_increase=session.get("solar_increase")
         )
+
+@app.route("/comparison-years")
+def comparison_years():
+
+    if "solar_payment" not in session or "solar_increase" not in session:
+        return redirect(url_for("solar_payment"))
+
+    return render_template("comparison_years.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
