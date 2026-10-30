@@ -16,7 +16,7 @@
             Enter your estimated monthly solar payment and the yearly increase for your solar payment.
         </p>
 
-        <form>
+        <form method="POST" onsubmit="return validateSolarPayment()">
 
             <label for="solar_payment">Estimated monthly solar payment</label>
 
@@ -24,9 +24,11 @@
                 <span>$</span>
                 <input
                     type="number"
+                    step="any"
                     id="solar_payment"
                     name="solar_payment"
                     placeholder="100.00"
+                    value="{{ solar_payment if solar_payment is not none else '' }}"
                 >
             </div>
 
@@ -42,9 +44,11 @@
             <div class="input-box">
                 <input
                     type="number"
+                    step="any"
                     id="solar_increase"
                     name="solar_increase"
                     placeholder="2.9"
+                    value="{{ solar_increase if solar_increase is not none else '' }}"
                 >
                 <span>%</span>
             </div>
@@ -56,7 +60,7 @@
             </p>
             
 
-            <button type="button" onclick="validateSolarPayment()">
+            <button type="submit">
                 Continue
             </button>
 
