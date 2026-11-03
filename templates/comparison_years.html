@@ -29,17 +29,42 @@
                 >
             </div>
 
+            <p class="error-text" id="years_error"></p>
+
             <p class="help-text">
                 Enter the number of years you want to use for the savings comparison.
             </p>
 
-            <button type="button">
+            <button type="button" onclick="validateComparisonYears()">
                 Continue to home location
             </button>
 
         </form>
 
     </div>
+
+    <script>
+        function validateComparisonYears() {
+            let comparisonYears = document.getElementById("comparison_years").value;
+            let yearsError = document.getElementById("years_error");
+    
+            yearsError.textContent = "";
+    
+            let valid = true;
+    
+            if (
+                comparisonYears === "" ||
+                isNaN(comparisonYears) ||
+                Number(comparisonYears) <= 0 ||
+                !Number.isInteger(Number(comparisonYears))
+            ) {
+                yearsError.textContent = "Please enter a valid whole number greater than 0.";
+                valid = false;
+            }
+    
+            return valid;
+        }
+    </script>
 
 </body>
 </html>
