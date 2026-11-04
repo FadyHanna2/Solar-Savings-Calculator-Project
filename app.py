@@ -56,13 +56,38 @@ def solar_payment():
         solar_increase=session.get("solar_increase")
         )
 
-@app.route("/comparison-years")
+@app.route("/comparison-years", methods=["GET", "POST"])
 def comparison_years():
 
     if "solar_payment" not in session or "solar_increase" not in session:
         return redirect(url_for("solar_payment"))
 
-    return render_template("comparison_years.html")
+    if request.method == "POST":
+        comparison_years = request.form.get("comparison_years")
+
+        try:
+            comparison_years = int(comparison_years)
+
+            if comparison_years > 0:
+                session["comparison_years"] = comparison_years
+                return redirect(url_for("home_location"))
+
+        except (TypeError, ValueError):
+            pass
+
+
+    return render_template(
+        "comparison_years.html",
+        comparison_years=session.get("comparison_years")
+        )
+
+@app.route("/home-location")
+def home_location():
+
+    if "comparison_years" not in session:
+        return redirect(url_for("comparison_years"))
+
+    return render_template("home_location.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

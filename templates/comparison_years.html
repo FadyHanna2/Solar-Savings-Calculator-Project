@@ -16,7 +16,7 @@
             Enter how many years you want to compare your electricity and solar costs.
         </p>
 
-        <form>
+        <form method="POST" onsubmit="return validateComparisonYears()">
 
             <label for="comparison_years">Number of years to compare</label>
 
@@ -26,6 +26,7 @@
                     id="comparison_years"
                     name="comparison_years"
                     placeholder="20"
+                    value="{{ comparison_years if comparison_years is not none else '' }}"
                 >
             </div>
 
@@ -35,7 +36,7 @@
                 Enter the number of years you want to use for the savings comparison.
             </p>
 
-            <button type="button" onclick="validateComparisonYears()">
+            <button type="submit">
                 Continue to home location
             </button>
 
