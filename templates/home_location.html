@@ -29,6 +29,8 @@
                 >
             </div>
 
+            <p class="error-text" id="street_error"></p>
+
             <label for="city">City</label>
 
             <div class="input-box">
@@ -39,6 +41,8 @@
                     placeholder="Chicago"
                 >
             </div>
+
+            <p class="error-text" id="city_error"></p>
 
             <label for="state">State</label>
 
@@ -51,6 +55,8 @@
                 >
             </div>
 
+            <p class="error-text" id="state_error"></p>
+
             <label for="zip_code">ZIP code</label>
 
             <div class="input-box">
@@ -62,13 +68,58 @@
                 >
             </div>
 
-            <button type="button">
+            <p class="error-text" id="zip_error"></p>
+
+            <button type="button" onclick="validateHomeLocation()">
                 Continue
             </button>
 
         </form>
 
     </div>
+
+    <script>
+        function validateHomeLocation() {
+            let streetAddress = document.getElementById("street_address").value.trim();
+            let city = document.getElementById("city").value.trim();
+            let state = document.getElementById("state").value.trim();
+            let zipCode = document.getElementById("zip_code").value.trim();
+
+            let streetError = document.getElementById("street_error");
+            let cityError = document.getElementById("city_error");
+            let stateError = document.getElementById("state_error");
+            let zipError = document.getElementById("zip_error");
+
+            streetError.textContent = "";
+            cityError.textContent = "";
+            stateError.textContent = "";
+            zipError.textContent = "";
+
+            let valid = true;
+
+            if (streetAddress === "") {
+                streetError.textContent = "Please enter your street address.";
+                valid = false;
+            }
+
+            if (city === "") {
+                cityError.textContent = "Please enter your city.";
+                valid = false;
+            }
+
+            if (state === "") {
+                stateError.textContent = "Please enter your state.";
+                valid = false;
+            }
+
+            if (zipCode === "") {
+                zipError.textContent = "Please enter your ZIP code.";
+                valid = false;
+            }
+
+            return valid;
+        }
+    </script>
 
 </body>
 </html>
