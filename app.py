@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for
+import requests
 
 app = Flask(__name__)
 app.secret_key = "solar-savings-project-key"
@@ -81,13 +82,69 @@ def comparison_years():
         comparison_years=session.get("comparison_years")
         )
 
-@app.route("/home-location")
+@app.route("/home-location", methods=["GET", "POST"])
 def home_location():
 
     if "comparison_years" not in session:
         return redirect(url_for("comparison_years"))
+    
+    error = None
+    latitude = None
+    longitude = None
 
-    return render_template("home_location.html")
+    street_address = ""
+    city = ""
+    state = ""
+    zip_code = ""
+
+    if request.method == "POST":
+        street_address = request.form.get("street_address", "").strip()
+        city = request.form.get("city", "").strip()
+        state = request.form.get("state", "").strip()
+        zip_code = request.form.get("zip_code", "").strip()
+
+        if street_address and city and state and zip_code:
+
+            url = "https://geocoding.geo.census.gov/geocoder/locations/address"
+
+            params = {
+                "street": street_address,
+                "city": city,
+                "state": state,
+                "zip": zip_code,
+                "benchmark": "Public_AR_Current",
+                "format": "json"
+            }
+
+            try:
+                response = requests.get(url, params=params, timeout=10)
+                response.raise_for_status()
+
+                data = response.json()
+                matches = data["result"]["addressMatches"]
+
+                if matches:
+                    coordinates = matches[0]["coordinates"]
+
+                    longitude = coordinates["x"]
+                    latitude = coordinates["y"]
+
+                else:
+                    error = "We could not find this address. Please check the address and try again."
+
+            except (requests.RequestException, ValueError, KeyError):
+                error = "There was a problem finding the location. Please try again."
+
+    return render_template(
+        "home_location.html",
+        street_address=street_address,
+        city=city,
+        state=state,
+        zip_code=zip_code,
+        latitude=latitude,
+        longitude=longitude,
+        error=error
+        )
 
 if __name__ == "__main__":
     app.run(debug=True)

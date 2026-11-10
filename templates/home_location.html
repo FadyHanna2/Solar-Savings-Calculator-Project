@@ -16,7 +16,21 @@
             Enter your home address so we can use the location later in the calculator.
         </p>
 
-        <form>
+        {% if error %}
+        <p class="error-text">
+            {{ error }}
+        </p>
+        {% endif %}
+
+        {% if latitude is not none and longitude is not none %}
+        <p class="success-message">
+            Location found.<br>
+            Latitude: {{ latitude }}<br>
+            Longitude: {{ longitude }}
+        </p>
+        {% endif %}
+
+        <form method="POST" onsubmit="return validateHomeLocation()">
 
             <label for="street_address">Street address</label>
 
@@ -26,6 +40,7 @@
                     id="street_address"
                     name="street_address"
                     placeholder="123 Main Street"
+                    value="{{ street_address }}"
                 >
             </div>
 
@@ -39,6 +54,7 @@
                     id="city"
                     name="city"
                     placeholder="Chicago"
+                    value="{{ city }}"
                 >
             </div>
 
@@ -52,6 +68,7 @@
                     id="state"
                     name="state"
                     placeholder="IL"
+                    value="{{ state }}"
                 >
             </div>
 
@@ -65,12 +82,13 @@
                     id="zip_code"
                     name="zip_code"
                     placeholder="60601"
+                    value="{{ zip_code }}"
                 >
             </div>
 
             <p class="error-text" id="zip_error"></p>
 
-            <button type="button" onclick="validateHomeLocation()">
+            <button type="submit">
                 Continue
             </button>
 
