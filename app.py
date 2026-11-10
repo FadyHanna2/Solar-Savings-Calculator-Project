@@ -128,6 +128,15 @@ def home_location():
 
                     longitude = coordinates["x"]
                     latitude = coordinates["y"]
+                    
+                    session["street_address"] = street_address
+                    session["city"] = city
+                    session["state"] = state
+                    session["zip_code"] = zip_code
+                    session["latitude"] = latitude
+                    session["longitude"] = longitude
+                    
+                    return redirect(url_for("solar_system"))
 
                 else:
                     error = "We could not find this address. Please check the address and try again."
@@ -145,6 +154,14 @@ def home_location():
         longitude=longitude,
         error=error
         )
+
+@app.route("/solar-system")
+def solar_system():
+
+    if "latitude" not in session or "longitude" not in session:
+        return redirect(url_for("home_location"))
+
+    return render_template("solar_system.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
