@@ -13,8 +13,61 @@
         <h1>Solar system information</h1>
 
         <p class="description">
-            Your home location is saved. The next step is to enter your solar system information.
+            Enter your solar system size and choose the panel direction and tilt.
         </p>
+
+        <form>
+
+            <label for="system_size">Solar system size</label>
+
+            <div class="input-box">
+                <input
+                    type="number"
+                    id="system_size"
+                    name="system_size"
+                    placeholder="8.5"
+                >
+                <span>kW</span>
+            </div>
+
+            <p class="help-text">
+                Enter the size of your solar system in kW.
+            </p>
+
+            <label for="panel_direction">Panel direction</label>
+
+            <div class="input-box">
+                <select id="panel_direction" name="panel_direction">
+                    <option value="">Choose direction</option>
+                    <option value="North">North</option>
+                    <option value="Northeast">Northeast</option>
+                    <option value="East">East</option>
+                    <option value="Southeast">Southeast</option>
+                    <option value="South">South</option>
+                    <option value="Southwest">Southwest</option>
+                    <option value="West">West</option>
+                    <option value="Northwest">Northwest</option>
+                </select>
+            </div>
+
+            <label for="panel_tilt">Panel tilt</label>
+
+            <div class="input-box">
+                <select id="panel_tilt" name="panel_tilt">
+                    <option value="">Choose tilt</option>
+                    <option value="0">0°</option>
+                    <option value="15">15°</option>
+                    <option value="30">30°</option>
+                    <option value="45">45°</option>
+                    <option value="60">60°</option>
+                </select>
+            </div>
+
+            <button type="button">
+                Continue
+            </button>
+
+        </form>
 
     </div>
 
