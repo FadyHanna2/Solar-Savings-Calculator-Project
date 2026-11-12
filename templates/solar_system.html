@@ -30,6 +30,8 @@
                 <span>kW</span>
             </div>
 
+            <p class="error-text" id="size_error"></p>
+
             <p class="help-text">
                 Enter the size of your solar system in kW.
             </p>
@@ -63,13 +65,35 @@
                 </select>
             </div>
 
-            <button type="button">
+            <button type="button" onclick="validateSystemSize()">
                 Continue
             </button>
 
         </form>
 
     </div>
+    
+    <script>
+        function validateSystemSize() {
+            let systemSize = document.getElementById("system_size").value;
+            let sizeError = document.getElementById("size_error");
+
+            sizeError.textContent = "";
+
+            let valid = true;
+
+            if (
+                systemSize === "" ||
+                isNaN(systemSize) ||
+                Number(systemSize) <= 0
+            ) {
+                sizeError.textContent = "Please enter a valid solar system size greater than 0.";
+                valid = false;
+            }
+
+            return valid;
+        }
+    </script>
 
 </body>
 </html>
