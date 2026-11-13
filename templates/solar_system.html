@@ -52,6 +52,8 @@
                 </select>
             </div>
 
+            <p class="error-text" id="direction_error"></p>
+
             <label for="panel_tilt">Panel tilt</label>
 
             <div class="input-box">
@@ -65,6 +67,8 @@
                 </select>
             </div>
 
+            <p class="error-text" id="tilt_error"></p>
+
             <button type="button" onclick="validateSystemSize()">
                 Continue
             </button>
@@ -76,9 +80,16 @@
     <script>
         function validateSystemSize() {
             let systemSize = document.getElementById("system_size").value;
+            let panelDirection = document.getElementById("panel_direction").value;
+            let panelTilt = document.getElementById("panel_tilt").value;
+
             let sizeError = document.getElementById("size_error");
+            let directionError = document.getElementById("direction_error");
+            let tiltError = document.getElementById("tilt_error");
 
             sizeError.textContent = "";
+            directionError.textContent = "";
+            tiltError.textContent = "";
 
             let valid = true;
 
@@ -88,6 +99,16 @@
                 Number(systemSize) <= 0
             ) {
                 sizeError.textContent = "Please enter a valid solar system size greater than 0.";
+                valid = false;
+            }
+
+            if (panelDirection === "") {
+                directionError.textContent = "Please choose a panel direction.";
+                valid = false;
+            }
+
+            if (panelTilt === "") {
+                tiltError.textContent = "Please choose a panel tilt.";
                 valid = false;
             }
 
