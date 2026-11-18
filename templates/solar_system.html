@@ -16,16 +16,18 @@
             Enter your solar system size and choose the panel direction and tilt.
         </p>
 
-        <form>
+        <form method="POST" onsubmit="return validateSystemSize()">
 
             <label for="system_size">Solar system size</label>
 
             <div class="input-box">
                 <input
                     type="number"
+                    step="any"
                     id="system_size"
                     name="system_size"
                     placeholder="8.5"
+                    value="{{ system_size if system_size is not none else '' }}"
                 >
                 <span>kW</span>
             </div>
@@ -41,14 +43,14 @@
             <div class="input-box">
                 <select id="panel_direction" name="panel_direction">
                     <option value="">Choose direction</option>
-                    <option value="North">North</option>
-                    <option value="Northeast">Northeast</option>
-                    <option value="East">East</option>
-                    <option value="Southeast">Southeast</option>
-                    <option value="South">South</option>
-                    <option value="Southwest">Southwest</option>
-                    <option value="West">West</option>
-                    <option value="Northwest">Northwest</option>
+                    <option value="North" {% if panel_direction == "North" %}selected{% endif %}>North</option>
+                    <option value="Northeast" {% if panel_direction == "Northeast" %}selected{% endif %}>Northeast</option>
+                    <option value="East" {% if panel_direction == "East" %}selected{% endif %}>East</option>
+                    <option value="Southeast" {% if panel_direction == "Southeast" %}selected{% endif %}>Southeast</option>
+                    <option value="South" {% if panel_direction == "South" %}selected{% endif %}>South</option>
+                    <option value="Southwest" {% if panel_direction == "Southwest" %}selected{% endif %}>Southwest</option>
+                    <option value="West" {% if panel_direction == "West" %}selected{% endif %}>West</option>
+                    <option value="Northwest" {% if panel_direction == "Northwest" %}selected{% endif %}>Northwest</option>
                 </select>
             </div>
 
@@ -59,17 +61,17 @@
             <div class="input-box">
                 <select id="panel_tilt" name="panel_tilt">
                     <option value="">Choose tilt</option>
-                    <option value="0">0°</option>
-                    <option value="15">15°</option>
-                    <option value="30">30°</option>
-                    <option value="45">45°</option>
-                    <option value="60">60°</option>
+                    <option value="0" {% if panel_tilt == "0" %}selected{% endif %}>0°</option>
+                    <option value="15" {% if panel_tilt == "15" %}selected{% endif %}>15°</option>
+                    <option value="30" {% if panel_tilt == "30" %}selected{% endif %}>30°</option>
+                    <option value="45" {% if panel_tilt == "45" %}selected{% endif %}>45°</option>
+                    <option value="60" {% if panel_tilt == "60" %}selected{% endif %}>60°</option>
                 </select>
             </div>
 
             <p class="error-text" id="tilt_error"></p>
 
-            <button type="button" onclick="validateSystemSize()">
+            <button type="submit">
                 Continue
             </button>
 

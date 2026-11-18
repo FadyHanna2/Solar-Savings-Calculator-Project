@@ -155,13 +155,54 @@ def home_location():
         error=error
         )
 
-@app.route("/solar-system")
+@app.route("/solar-system", methods=["GET", "POST"])
 def solar_system():
 
     if "latitude" not in session or "longitude" not in session:
         return redirect(url_for("home_location"))
+    
+    if request.method == "POST":
+        system_size = request.form.get("system_size")
+        panel_direction = request.form.get("panel_direction")
+        panel_tilt = request.form.get("panel_tilt")
 
-    return render_template("solar_system.html")
+        allowed_directions = [
+            "North",
+            "Northeast",
+            "East",
+            "Southeast",
+            "South",
+            "Southwest",
+            "West",
+            "Northwest"
+        ]
+
+        allowed_tilts = ["0", "15", "30", "45", "60"]
+
+        try:
+            system_size = float(system_size)
+
+            if (
+                system_size > 0
+                and panel_direction in allowed_directions
+                and panel_tilt in allowed_tilts
+            ):
+                session["system_size"] = system_size
+                session["panel_direction"] = panel_direction
+                session["panel_tilt"] = panel_tilt
+
+                return redirect(url_for("solar_system"))
+
+        except (TypeError, ValueError):
+            pass
+
+
+    return render_template(
+        "solar_system.html",
+        system_size=session.get("system_size"),
+        panel_direction=session.get("panel_direction"),
+        panel_tilt=session.get("panel_tilt")
+        )
 
 if __name__ == "__main__":
     app.run(debug=True)
