@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for
 import requests
+import pvlib
 
 app = Flask(__name__)
 app.secret_key = "solar-savings-project-key"
@@ -191,7 +192,7 @@ def solar_system():
                 session["panel_direction"] = panel_direction
                 session["panel_tilt"] = panel_tilt
 
-                return redirect(url_for("solar_system"))
+                return redirect(url_for("prepare_solar_data"))
 
         except (TypeError, ValueError):
             pass
@@ -203,6 +204,51 @@ def solar_system():
         panel_direction=session.get("panel_direction"),
         panel_tilt=session.get("panel_tilt")
         )
+
+@app.route("/prepare-solar-data")
+def prepare_solar_data():
+
+    required_values = [
+        "latitude",
+        "longitude",
+        "system_size",
+        "panel_direction",
+        "panel_tilt"
+    ]
+
+    for value in required_values:
+        if value not in session:
+            return redirect(url_for("home"))
+
+    direction_to_azimuth = {
+        "North": 0,
+        "Northeast": 45,
+        "East": 90,
+        "Southeast": 135,
+        "South": 180,
+        "Southwest": 225,
+        "West": 270,
+        "Northwest": 315
+    }
+
+    latitude = float(session["latitude"])
+    longitude = float(session["longitude"])
+    system_size = float(session["system_size"])
+    panel_tilt = float(session["panel_tilt"])
+    panel_direction = session["panel_direction"]
+
+    panel_azimuth = direction_to_azimuth[panel_direction]
+    
+    session["panel_azimuth"] = panel_azimuth
+
+    return (
+        f"Latitude: {latitude}<br>"
+        f"Longitude: {longitude}<br>"
+        f"System size: {system_size} kW<br>"
+        f"Panel direction: {panel_direction}<br>"
+        f"Panel azimuth: {panel_azimuth}°<br>"
+        f"Panel tilt: {panel_tilt}°"
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
