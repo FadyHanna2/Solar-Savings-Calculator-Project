@@ -238,17 +238,62 @@ def prepare_solar_data():
     panel_direction = session["panel_direction"]
 
     panel_azimuth = direction_to_azimuth[panel_direction]
-    
+
     session["panel_azimuth"] = panel_azimuth
 
-    return (
-        f"Latitude: {latitude}<br>"
-        f"Longitude: {longitude}<br>"
-        f"System size: {system_size} kW<br>"
-        f"Panel direction: {panel_direction}<br>"
-        f"Panel azimuth: {panel_azimuth}°<br>"
-        f"Panel tilt: {panel_tilt}°"
-    )
+    return redirect(url_for("solar_production"))
+
+@app.route("/solar-production")
+def solar_production():
+
+    required_values = [
+        "latitude",
+        "longitude",
+        "system_size",
+        "panel_tilt",
+        "panel_azimuth"
+    ]
+
+    for value in required_values:
+        if value not in session:
+            return redirect(url_for("home"))
+
+    latitude = float(session["latitude"])
+    longitude = float(session["longitude"])
+    system_size = float(session["system_size"])
+    panel_tilt = float(session["panel_tilt"])
+    panel_azimuth = float(session["panel_azimuth"])
+
+    try:
+        solar_data, metadata = pvlib.iotools.get_pvgis_hourly(
+            latitude=latitude,
+            longitude=longitude,
+            start=2020,
+            end=2020,
+            surface_tilt=panel_tilt,
+            surface_azimuth=panel_azimuth,
+            pvcalculation=True,
+            peakpower=system_size,
+            pvtechchoice="crystSi",
+            mountingplace="building",
+            loss=14
+        )
+
+        annual_production = solar_data["P"].sum() / 1000
+
+        annual_production = round(annual_production, 2)
+
+        session["annual_production"] = annual_production
+
+        return (
+            f"System size: {system_size} kW<br>"
+            f"Panel tilt: {panel_tilt}°<br>"
+            f"Panel azimuth: {panel_azimuth}°<br>"
+            f"Estimated annual solar production: {annual_production} kWh"
+        )
+
+    except (requests.RequestException, ValueError, KeyError):
+        return "There was a problem calculating the solar production. Please try again."
 
 if __name__ == "__main__":
     app.run(debug=True)
