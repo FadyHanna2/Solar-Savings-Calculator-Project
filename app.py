@@ -302,5 +302,37 @@ def solar_production():
             error="There was a problem calculating the solar production. Please try again."
         )
 
+@app.route("/prepare-savings-data")
+def prepare_savings_data():
+
+    required_values = [
+        "monthly_bill",
+        "utility_increase",
+        "solar_payment",
+        "solar_increase",
+        "comparison_years",
+        "annual_production"
+    ]
+
+    for value in required_values:
+        if value not in session:
+            return redirect(url_for("home"))
+
+    monthly_bill = float(session["monthly_bill"])
+    utility_increase = float(session["utility_increase"])
+    solar_payment = float(session["solar_payment"])
+    solar_increase = float(session["solar_increase"])
+    comparison_years = int(session["comparison_years"])
+    annual_production = float(session["annual_production"])
+
+    return (
+        f"Monthly electric bill: ${monthly_bill}<br>"
+        f"Yearly utility increase: {utility_increase}%<br>"
+        f"Monthly solar payment: ${solar_payment}<br>"
+        f"Yearly solar increase: {solar_increase}%<br>"
+        f"Comparison years: {comparison_years}<br>"
+        f"Annual solar production: {annual_production} kWh"
+    )        
+
 if __name__ == "__main__":
     app.run(debug=True)
