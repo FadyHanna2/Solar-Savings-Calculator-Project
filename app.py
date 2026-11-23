@@ -285,15 +285,22 @@ def solar_production():
 
         session["annual_production"] = annual_production
 
-        return (
-            f"System size: {system_size} kW<br>"
-            f"Panel tilt: {panel_tilt}°<br>"
-            f"Panel azimuth: {panel_azimuth}°<br>"
-            f"Estimated annual solar production: {annual_production} kWh"
+        return render_template(
+            "solar_production.html",
+            system_size=system_size,
+            panel_tilt=panel_tilt,
+            panel_azimuth=panel_azimuth,
+            annual_production=annual_production,
+            error=None
         )
 
     except (requests.RequestException, ValueError, KeyError):
-        return "There was a problem calculating the solar production. Please try again."
+        session.pop("annual_production", None)
+
+        return render_template(
+            "solar_production.html",
+            error="There was a problem calculating the solar production. Please try again."
+        )
 
 if __name__ == "__main__":
     app.run(debug=True)

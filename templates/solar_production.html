@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Solar Production Estimate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="calculator-card">
+
+        <p class="small-title">SOLAR SAVINGS CALCULATOR</p>
+
+        <h1>Solar production estimate</h1>
+
+        {% if error %}
+
+            <p class="error-text">
+                {{ error }}
+            </p>
+
+            <p class="description">
+                Please go back and check the solar system information before trying again.
+            </p>
+
+            <a href="{{ url_for('solar_system') }}">
+                <button type="button">Go back</button>
+            </a>
+
+        {% else %}
+
+            <p class="description">
+                The estimated annual solar production was calculated successfully.
+            </p>
+
+            <p><strong>System size:</strong> {{ system_size }} kW</p>
+            <p><strong>Panel tilt:</strong> {{ panel_tilt }}°</p>
+            <p><strong>Panel azimuth:</strong> {{ panel_azimuth }}°</p>
+
+            <p class="success-message">
+                Estimated annual solar production: {{ annual_production }} kWh
+            </p>
+
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
