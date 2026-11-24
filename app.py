@@ -325,14 +325,52 @@ def prepare_savings_data():
     comparison_years = int(session["comparison_years"])
     annual_production = float(session["annual_production"])
 
+    return redirect(url_for("electricity_costs"))
+
+@app.route("/electricity-costs")
+def electricity_costs():
+
+    required_values = [
+        "monthly_bill",
+        "utility_increase",
+        "comparison_years"
+    ]
+
+    for value in required_values:
+        if value not in session:
+            return redirect(url_for("home"))
+
+    monthly_bill = float(session["monthly_bill"])
+    utility_increase = float(session["utility_increase"])
+    comparison_years = int(session["comparison_years"])
+
+    yearly_costs = []
+
+    yearly_electricity_cost = monthly_bill * 12
+
+    for year in range(1, comparison_years + 1):
+
+        yearly_costs.append(
+            {
+                "year": year,
+                "cost": round(yearly_electricity_cost, 2)
+            }
+        )
+
+        yearly_electricity_cost = yearly_electricity_cost * (
+            1 + utility_increase / 100
+        )
+
+    session["electricity_costs"] = [
+        item["cost"] for item in yearly_costs
+    ]
+
     return (
-        f"Monthly electric bill: ${monthly_bill}<br>"
-        f"Yearly utility increase: {utility_increase}%<br>"
-        f"Monthly solar payment: ${solar_payment}<br>"
-        f"Yearly solar increase: {solar_increase}%<br>"
-        f"Comparison years: {comparison_years}<br>"
-        f"Annual solar production: {annual_production} kWh"
-    )        
+        "<br>".join(
+            f"Year {item['year']}: ${item['cost']}"
+            for item in yearly_costs
+        )
+    )     
 
 if __name__ == "__main__":
     app.run(debug=True)
