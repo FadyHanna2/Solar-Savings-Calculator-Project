@@ -365,12 +365,95 @@ def electricity_costs():
         item["cost"] for item in yearly_costs
     ]
 
-    return (
-        "<br>".join(
-            f"Year {item['year']}: ${item['cost']}"
-            for item in yearly_costs
+    return redirect(url_for("solar_savings")) 
+
+@app.route("/solar-savings")
+def solar_savings():
+
+    required_values = [
+        "solar_payment",
+        "solar_increase",
+        "comparison_years",
+        "electricity_costs"
+    ]
+
+    for value in required_values:
+        if value not in session:
+            return redirect(url_for("home"))
+
+    solar_payment = float(session["solar_payment"])
+    solar_increase = float(session["solar_increase"])
+    comparison_years = int(session["comparison_years"])
+    electricity_costs = session["electricity_costs"]
+
+    solar_costs = []
+    yearly_savings = []
+
+    yearly_solar_cost = solar_payment * 12
+
+    for year in range(comparison_years):
+
+        electricity_cost = electricity_costs[year]
+
+        solar_cost = round(yearly_solar_cost, 2)
+
+        savings = round(
+            electricity_cost - solar_cost,
+            2
         )
-    )     
+
+        solar_costs.append(solar_cost)
+        yearly_savings.append(savings)
+
+        yearly_solar_cost = yearly_solar_cost * (
+            1 + solar_increase / 100
+        )
+
+    total_electricity_cost = round(
+        sum(electricity_costs),
+        2
+    )
+
+    total_solar_cost = round(
+        sum(solar_costs),
+        2
+    )
+
+    total_savings = round(
+        total_electricity_cost - total_solar_cost,
+        2
+    )
+
+    session["solar_costs"] = solar_costs
+    session["yearly_savings"] = yearly_savings
+    session["total_electricity_cost"] = total_electricity_cost
+    session["total_solar_cost"] = total_solar_cost
+    session["total_savings"] = total_savings
+
+    results = []
+
+    for year in range(comparison_years):
+
+        results.append(
+            f"Year {year + 1}: "
+            f"Electricity ${electricity_costs[year]} - "
+            f"Solar ${solar_costs[year]} - "
+            f"Savings ${yearly_savings[year]}"
+        )
+
+    results.append(
+        f"<br>Total electricity cost: ${total_electricity_cost}"
+    )
+
+    results.append(
+        f"Total solar cost: ${total_solar_cost}"
+    )
+
+    results.append(
+        f"Total savings: ${total_savings}"
+    )
+
+    return "<br>".join(results)
 
 if __name__ == "__main__":
     app.run(debug=True)
