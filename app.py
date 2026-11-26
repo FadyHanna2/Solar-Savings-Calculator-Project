@@ -430,30 +430,49 @@ def solar_savings():
     session["total_solar_cost"] = total_solar_cost
     session["total_savings"] = total_savings
 
-    results = []
+    return redirect(url_for("check_calculation_results"))
 
-    for year in range(comparison_years):
+@app.route("/check-calculation-results")
+def check_calculation_results():
 
-        results.append(
-            f"Year {year + 1}: "
-            f"Electricity ${electricity_costs[year]} - "
-            f"Solar ${solar_costs[year]} - "
-            f"Savings ${yearly_savings[year]}"
-        )
+    required_results = [
+        "electricity_costs",
+        "solar_costs",
+        "yearly_savings",
+        "total_electricity_cost",
+        "total_solar_cost",
+        "total_savings"
+    ]
 
-    results.append(
-        f"<br>Total electricity cost: ${total_electricity_cost}"
-    )
+    for result in required_results:
+        if result not in session:
+            return redirect(url_for("home"))
 
-    results.append(
-        f"Total solar cost: ${total_solar_cost}"
-    )
+    electricity_costs = session["electricity_costs"]
+    solar_costs = session["solar_costs"]
+    yearly_savings = session["yearly_savings"]
 
-    results.append(
+    total_electricity_cost = session["total_electricity_cost"]
+    total_solar_cost = session["total_solar_cost"]
+    total_savings = session["total_savings"]
+
+    if (
+        len(electricity_costs) == 0
+        or len(solar_costs) == 0
+        or len(yearly_savings) == 0
+        or len(electricity_costs) != len(solar_costs)
+        or len(electricity_costs) != len(yearly_savings)
+    ):
+        return redirect(url_for("home"))
+
+    return (
+        f"Yearly electricity results saved: {len(electricity_costs)} years<br>"
+        f"Yearly solar results saved: {len(solar_costs)} years<br>"
+        f"Yearly savings results saved: {len(yearly_savings)} years<br><br>"
+        f"Total electricity cost: ${total_electricity_cost}<br>"
+        f"Total solar cost: ${total_solar_cost}<br>"
         f"Total savings: ${total_savings}"
     )
-
-    return "<br>".join(results)
 
 if __name__ == "__main__":
     app.run(debug=True)
